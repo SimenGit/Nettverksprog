@@ -18,21 +18,15 @@ public class ServerThread extends Thread{
         return tall1 - tall2;
     }
 
-
     public void run() {
         System.out.println("Ny Klient koplet til pÃ¥ thread id: " + Thread.currentThread().getId());
         try {
             InputStreamReader leseforbindelse = new InputStreamReader(socket.getInputStream());
             BufferedReader leseren = new BufferedReader(leseforbindelse);
             PrintWriter skriveren = new PrintWriter(socket.getOutputStream(), true);
-
-            /* Sender innledning til klienten */
             skriveren.println("Hei, du har kontakt med tjenersiden!");
-
             do {
-
                 int svar = -99999999;
-
                 skriveren.println("Skriv tall nr 1");
                 int tall1 = Integer.parseInt(leseren.readLine());
                 skriveren.println("Skriv tall nr 2");
@@ -45,18 +39,14 @@ public class ServerThread extends Thread{
                     svar = subtraher(tall1, tall2);
                 }else{
                     skriveren.println("Du kan kun bruke '+' eller '-', opprett ny forbindelse.");
-                    /* Lukker forbindelsen */
                     leseren.close();
                     skriveren.close();
                     socket.close();
                 }
-
-                System.out.println("En klient utfÃ¸rte en operasjon, svaret ble: " + svar + "   (thread " + Thread.currentThread().getId() + ")");
+                System.out.println("En klient utførte en operasjon, svaret ble: " + svar + " (thread " + Thread.currentThread().getId() + ")");
                 skriveren.println("Svaret blir: " + svar); // sender svar til klienten
-
             }while (leseren.readLine() != null);
-
-            /* Lukker forbindelsen */
+            
             skriveren.println("-- Lukker forbindelsen --");
             leseren.close();
             skriveren.close();
